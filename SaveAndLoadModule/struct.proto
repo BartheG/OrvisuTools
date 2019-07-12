@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pb;
+
+message CustomDict {
+	string key = 1;
+	SaveArray value = 2;
+}
+
+message SaveArray {
+	string name = 1;
+	bytes data = 2;
+	string shape = 3;
+}
+
+message Data {
+	repeated CustomDict data = 1;
+}
