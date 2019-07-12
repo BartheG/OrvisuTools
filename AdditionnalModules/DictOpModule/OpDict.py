@@ -33,4 +33,3 @@ def getNewShappedArray(shapewanted,data,old=[],idx_l=[]):
 	idx=getRecursIndex(range(dshape[0])) if len(old)==0 else old.pop()
 	idx_l.append(idx)
 	return getNewShappedArray(shapewanted,data[idx],old=old,idx_l=idx_l)
-#Display prompt to manually choose an index in dict python object

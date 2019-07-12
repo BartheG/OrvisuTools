@@ -7,7 +7,7 @@ class StructSave:
 	def __init__(self):
 		self.struct = struct_pb2.Data()
 
-	def cleanFile(self,filename,isErase):
+	def clearOrReadFile(self,filename,isErase):
 		if isErase==True:
 			open(filename,'w').close()
 		else:
@@ -17,9 +17,6 @@ class StructSave:
 				file.close()
 			except FileNotFoundError:
 				pass
-
-	def getCurrentTime(self):
-		return datetime.timestamp(datetime.now())
 
 	def fillStruct(self,name,data,shape,m_id):
 		fill_data=self.struct.data.add()
@@ -43,7 +40,7 @@ class StructSave:
 	def run(self,**kwargs):
 		custom_id=kwargs.get('id','m_id')
 		filename=kwargs.get('filename','structdata.out')
-		self.cleanFile(filename,kwargs.get('clean_file',False))
+		self.clearOrReadFile(filename,kwargs.get('clear_file',False))
 		self.runIntoData(custom_id,**kwargs)
 		try:
 			file=open(filename,'wb')

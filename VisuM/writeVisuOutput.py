@@ -1,45 +1,45 @@
 import numpy
-import time
 
 class WriteVisuOutput:
 	def __init__(self):
 		self.choice_read = {
 			'ubc':self.writeUBC,
-			'plotly':self.writePlotly
 		}
 
-	#Write .csv files depending on 3D array to use plotly visualization
-	def writePlotly(self):
-		if len(self.data.shape) != 3:
-			return False
-		numpy.savetxt(self.filename+'.map',self.data.shape,newline=" ")
-		for i in range(self.data.shape[2]):
-			numpy.savetxt(self.filename+str(i)+".csv", (self.data[:,:,i]), delimiter=",")
-		return True
-
-	#Write ubc type file to use PVGeo visualization
+	#Transforms numpy array to model files following 'ubc' format
 	def writeUBC(self):
 		if len(self.data.shape) != 3:
 			return False
 		n_data = numpy.flip(self.data.ravel())
 		with open(self.filename, mode='wt', encoding='utf-8') as myfile:
 			if self.bedrock:
-				myfile.write('\n'.join(str(line).replace('-100.0','oui') for line in n_data))
+				myfile.write('\n'.join(str(line).replace('-100.0','nan') for line in n_data))
 			else:
-				myfile.write('\n'.join(str(line).replace('-100.0','oui').replace('100.0','oui') for line in n_data))
+				myfile.write('\n'.join(str(line).replace('-100.0','nan').replace('100.0','nan') for line in n_data))
 		return True
 
-	#Determine which write option use
+	#Calls 'outFormat' method to write model file
+	#toWrite: numpy array, array to transform
+	#outFormat: 'ubc'
+	#filename: str, prefix of the model and map output files
 	def run(self,toWrite,outFormat,filename,bedrock=False):
-		if outFormat in self.choice_read.keys():
+		if outFormat in self.choice_read.keys() and len(toWrite.shape)==3:
 			self.data = toWrite
-			self.filename = filename
+			self.filename = filename+'_model.out'
 			self.bedrock = bedrock
+			self.draw_magage(
+				filename+'_mesh.out',
+				self.data.shape[0],
+				self.data.shape[1],
+				self.data.shape[2]
+			)
 			print('Write complete...') if self.choice_read[outFormat]() else print('Error on data')
 		else:
 			print('Write format not recognized...')
 
-	#Draw mapage from witch simulation to define the domain to display
+	#Draw map file following 'ubc' format
+	#filename: name of output file
+	#x,y,z: dimension of array
 	def draw_magage(self,filename,x,y,z):
 		file = open(filename,'w')
 		file.write(str(x)+' '+str(y)+' '+str(z)+'\n')
@@ -51,6 +51,7 @@ class WriteVisuOutput:
 		file.close()
 		print('Write of mapage...')
 
+#Main to test
 def main():
 	data = numpy.linspace(1,80,60*60*60)
 	data = data.reshape((
@@ -58,9 +59,7 @@ def main():
 	))
 
 	w = WriteVisuOutput()
-	start = time.time()
-	#w.run(data,'ubc','./test.file.out')
-	print(time.time() - start)
+	w.run(data,'ubc','./test')
 
 if __name__ == '__main__':
 	main()

@@ -35,37 +35,32 @@ class VisuWrap:
 			'Path to saved files (concatenation to '+self.startdir+') :'
 		)
 		self.prefixfiles=getRecursInputStr(
-			'Pattern of saved files (ex: return_of_the*.out):'
+			'Pattern of saved files (ex: savedfile*.out):'
 		)
-		self.pathproto=self.startdir+'/'+getRecursInputStr(
-			'Path to protobuf files (concatenation to '+self.startdir+'):'
-		)
-		self.prefixproto=getRecursInputStr(
-			'Pattern of protobuf files (ex: datap*.out):'
-		)
+
+#A test
+	def initPathPattern(self):
+		self.setPath()
+		self.fread=FileHandling.FileHandling((self.prefixfiles,self.pathfiles))
+		try:
+			self.fread.run()
+		except FileNotFoundError:
+			print('Wrong path or pattern')
+			return self.initPathPattern()
+		except KeyboardInterrupt:
+			exit()
 
 	def run(self):
-		self.setPath()
-
-		self.fread=FileHandling.FileHandling(
-			(self.prefixproto,self.pathproto,),
-			(self.prefixfiles,self.pathfiles)
-		)
-		#Debug
-		# self.fread=FileHandling.FileHandling(
-		# 	('cidre_data*.out','../ProjectRun/exp_data/'),
-		# 	('return_of_th*.out','../ProjectRun/inputs/')
-		# )
-		self.fread.run()
+		self.initPathPattern()
 		while True:
 			self.torun=OpDict.moveIntoDict('Choose type of visualization/command',self.allvisu)
 			try:
 				self.sendToVisu()
-			except:
-				print('Avoid the crash')
+			except Exception as e:
+				print('Crash...',str(e))
 
 def main():
-	startdir='../ProjectRun/'
+	startdir='.'
 
 	VisuWrap(startdir).run()
 

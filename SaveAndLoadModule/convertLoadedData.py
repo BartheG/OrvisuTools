@@ -7,7 +7,7 @@ class ProtoToNumpy:
 
 	def run(self):
 		if len(self.data)==0:
-			return False
+			return None
 		fdata={}
 		for i in self.data:
 			if i.key not in fdata:
@@ -17,7 +17,7 @@ class ProtoToNumpy:
 					i.value.data
 				)
 			).reshape(
-				eval(
+				tuple(
 					i.value.shape
 				)
 			)
