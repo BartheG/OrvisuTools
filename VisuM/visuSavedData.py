@@ -76,7 +76,7 @@ class WriteSavedData:
 				self.to_print.shape[1])
 			,self.log)
 
-	#Executes write of data's
+	#Executes write of datas
 	def drawFiles(self):
 		self.writevisuout.draw_magage(
 			'./results/map_test_min_'

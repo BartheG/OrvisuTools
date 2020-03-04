@@ -71,7 +71,6 @@ def anim(func):
 
 
 def main():
-	#glob='/Users/guillaume/Desktop/SaveVracWitchXCidre/WitchXCidre08_07_19_15*15/'
 	glob=sys.argv[1]
 	VisuForAnimation(
 		('cidre_data_*.out',glob+'exp_data/'),

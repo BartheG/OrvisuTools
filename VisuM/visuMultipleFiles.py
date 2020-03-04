@@ -21,10 +21,6 @@ class VisuMultipleFiles:
 		)
 
 	def getSavedInfosFromFiles(self):
-		# for it,path in enumerate(self.filenames):
-		# 	print(it,' ',end=' ',flush=True)
-		# 	self.allfilesdata.append(convertLoadedData.protoToNumpy(path))
-		# print('')
 		self.timekey=[i for i in set().union(*(d.keys() for d in self.allfilesdata))]
 		self.varkey=[i for i in set().union(*(d[i].keys() for d in self.allfilesdata for i in self.timekey if i in d.keys()))]
 
